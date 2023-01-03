@@ -94,4 +94,91 @@ public override void ConfigureServices(ServiceConfigurationContext context)
 }
 
 ```
+# Authorizatio
+* Xác thực được dùng để kiểm tra xem người dùng có được phép thực hiện một số thao tác cụ thể trong ứng dụng hay không
+ ## Authorize Attribute 
+ ## Permission system
+ * quyền là một chính sách đơn giản được cấp hoặc cấm đối với một người dùng, vai trò và khách hàng cụ thể
+ ## Defining permisstions
+ * Để xác định quyền, tạo một lớp kế thừa từ PermisstionDefinitionProvider
+ ```
+ using Volo.Abp.Authorization.Permissions;
+
+namespace Acme.BookStore.Permissions
+{
+    public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvider
+    {
+        public override void Define(IPermissionDefinitionContext context)
+        {
+            var myGroup = context.AddGroup("BookStore");
+
+            myGroup.AddPermission("BookStore_Author_Create");
+        }
+    }
+
+Notes: ABP tự động nhận dạng được lớp này không cần cấu hình thêm, thường cấu hình quyền trong module Application.Contracts
+```
+ ## Multi-Tenancy
+ * ABP hỗ trợ nhiều kiểu đăng kí quyền, có thể xác định quyền cho các bên thuê dịch vụ khi xác định quyền mới.
+ ```
+ Host: quyền chỉ khả dụng cho phía máy chủ
+ Tenant: quyền chỉ khả dụng cho đối tượng thuê.
+ Both (mặc định): quyền có sẵn cho cả bên thuê và bên lưu trữ
+ Notes: Nếu ứng dụng không phải nhiều bên thuê có thể bỏ qua mục này
+ Để đặt tùy chọn bên cho nhiều người thuê trong phương thức thêm params thứ 3
+ myGroup.AddPermission(
+    "BookStore_Author_Create",
+    LocalizableString.Create<BookStoreResource>("Permission:BookStore_Author_Create"),
+    multiTenancySide: MultiTenancySides.Tenant //set multi-tenancy side!
+);
+```
+ ## Enable/ Disable Permisstions
+ * Quyền được bật mặc định, có thể vô hiệu hóa một quyền, quyền bị vô hiệu hóa sẽ bị cấm đối với mọi người, có thể kiểm tra quyên nhưng nó sẽ luôn bị cấm
+ ```
+ myGroup.AddPermission("Author_Management", isEnabled: false);
+```
+ ## Changing Permisstion Definitions of a depended module 
+ ```context
+    .GetPermissionOrNull(IdentityPermissions.Roles.Delete)
+    .IsEnabled = false;
+ Khi thêm mã này vào mục định nghĩa quyền nó sẽ tìm thấy quyền xóa roles của module nhận dạng và vô hiệu quá quyền, nên trong ứng dụng không ai có thế xóa roles
+```
+ # Sử dụng quyền tùy thuộc vào điều kiện
+ * Tùy thuộc vào một tính năng
+ ```
+ myGroup.AddPermission("Book_Creation")
+    .RequireFeatures("BookManagement");
+NOTES: Sử dụng phương thức mở rộng RequreFeatures để sử dụng khi đó, quyền chỉ được sử dụng khí tính năng BookManagement được bật, tương tự như vậy có thể sử dụng phương thức RequireGlobalFeatures
+```
+ # Permission Management
+ * Nếu muốn quản lí quyền theo mã, inject  thêm IPermisstionManager
+ ```
+ public class MyService : ITransientDependency
+{
+    private readonly IPermissionManager _permissionManager;
+
+    public MyService(IPermissionManager permissionManager)
+    {
+        _permissionManager = permissionManager;
+    }
+
+    public async Task GrantPermissionForUserAsync(Guid userId, string permissionName)
+    {
+        await _permissionManager.SetForUserAsync(userId, permissionName, true);
+    }
+
+    public async Task ProhibitPermissionForUserAsync(Guid userId, string permissionName)
+    {
+        await _permissionManager.SetForUserAsync(userId, permissionName, false);
+    }
+}
+ Notes: SetForUserAsync đặt giá trị true/false cho quyền của người dùng, có các phương thức mở rộng hơn như SetForRoleAsync và SetForClientAsync
+        IPermission được xác định bởi module quản lý quyền
+```
+ # Avanced Topics Permisstions
+ ## Permission value providers
+ * UserPermissions Value Provider kiểm tra xem người dùng được cấp quyền hay chưa sử dụng, lấy Id của người dùng từ các xác nhận quyền sở hữu hiện tại, UserClaims name được định nghĩa bởi AbpClaimTypes.UserID
+ * RolePermissionValueProvider......AbpClaimTypesTypes.Role
+ * ClientPermisstionValueProvider kiểm tra xem máy khách hiện tại có được cấp quyền hay không... AbpClaimTypes.ClientId
+ 
 
