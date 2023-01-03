@@ -48,4 +48,50 @@ public class TaxCalculator: ICalculator, ITaxCalculator, ICanCalculate, ITransie
 }
 class TaxCalculator chỉ được tiêm bới ITaxCalculator
  ```
- 
+ # Options
+ * Lấy giá trị options bằng cách DI dịch vụ IOptions vào lớp và sử dụng thuộc tính .Value
+ ```
+ public class MyService : ITransientDependency
+{
+    private readonly MyOptions _options;
+    
+    public MyService(IOptions<MyOptions> options)
+    {
+        _options = options.Value; //Notice the options.Value usage!
+    }
+
+    public void DoIt()
+    {
+        var v1 = _options.Value1;
+        var v2 = _options.Value2;
+    }
+}
+```
+* Các property options chỉ được sử dụng khi đã đươc định nghĩa và DI trong class, nếu muốn sử dụng chúng trong việc cấu hình trong giai đoạn DI, để giải quyết vấn đề này  ABP đã đưa ra các phương thức mở rộng PreConfigure<TOptions> và ExecutePreConfigureActions<TOptions> của IServiceCollection
+* Cách sử dụng:
+``` 
+Định nghĩa một lớp tùy chọn trước cho module của project:
+public class MyPreOptions
+{
+    public bool MyValue { get; set; }
+}
+Bất kì module nào phụ thuộc vào module của bạn đều có thể sử dụng phương thức PreConfigure<TOptions> trong PreConfigureServices
+public override void PreConfigureServices(ServiceConfigurationContext context)
+{
+    PreConfigure<MyPreOptions>(options =>
+    {
+        options.MyValue = true;
+    });
+}
+Các module khác nhau có thể ghi đè giá trị dựa trên thứ tự sử dụng của chúng
+public override void ConfigureServices(ServiceConfigurationContext context)
+{
+    var options = context.Services.ExecutePreConfiguredActions<MyPreOptions>();
+    if (options.MyValue)
+    {
+        //...
+    }
+}
+
+```
+
