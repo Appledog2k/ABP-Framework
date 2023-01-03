@@ -44,13 +44,13 @@ namespace Acme.BookStore.Authors
         {
             await _authorRepository.DeleteAsync(id);
         }
-
+        [AllowAnonymous]
         public async Task<AuthorDto> GetAsync(Guid id)
         {
             var author = await _authorRepository.GetAsync(id);
             return ObjectMapper.Map<Author, AuthorDto>(author);
         }
-
+        [AllowAnonymous]
         public async Task<PagedResultDto<AuthorDto>> GetListAsync(GetAuthorListDto input)
         {
             if (input.Sorting.IsNullOrWhiteSpace())

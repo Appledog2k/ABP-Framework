@@ -1,4 +1,5 @@
-﻿using Volo.Abp.Account;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
 using Volo.Abp.Identity;
@@ -21,11 +22,19 @@ namespace Acme.BookStore;
     )]
 public class BookStoreApplicationModule : AbpModule
 {
+    // ABP tự động đăng kí dịch vụ nếu không muốn đăng kí dịch vụ có thể dùng phương thức này
+    public override void PreConfigureServices(ServiceConfigurationContext context)
+    {
+        SkipAutoServiceRegistration = true;
+    }
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<BookStoreApplicationModule>();
         });
+        // Sau khi hủy đăng kí tự động có thể dùng phương thức mở rộng AddAssembly để đăng kí tất cả dịch vụ theo quy ước mặc định
+        context.Services.AddAssemblyOf<BookStoreApplicationModule>();
     }
+
 }
