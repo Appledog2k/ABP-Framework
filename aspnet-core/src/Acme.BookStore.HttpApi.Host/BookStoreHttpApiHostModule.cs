@@ -28,6 +28,8 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Swashbuckle;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Volo.Abp.DistributedLocking;
+using Volo.Abp.Emailing;
 
 namespace Acme.BookStore;
 
@@ -42,7 +44,8 @@ namespace Acme.BookStore;
     typeof(AbpAspNetCoreSerilogModule),
     typeof(AbpSwashbuckleModule)
 )]
-public class BookStoreHttpApiHostModule : AbpModule
+    [DependsOn(typeof(AbpEmailingModule))]
+    public class BookStoreHttpApiHostModule : AbpModule
 {
     public override void PreConfigureServices(ServiceConfigurationContext context)
     {
@@ -70,6 +73,7 @@ public class BookStoreHttpApiHostModule : AbpModule
         ConfigureVirtualFileSystem(context);
         ConfigureCors(context, configuration);
         ConfigureSwaggerServices(context, configuration);
+
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)

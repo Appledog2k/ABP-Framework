@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 using Volo.Abp.Application.Dtos;
+using Volo.Abp.Domain.Entities;
 
 namespace Acme.BookStore.Books
 {
     public class BookDto : AuditedEntityDto<Guid>
+        //, IHasConcurrencyStamp
     {
         public string Name { get; set; }
 
@@ -16,5 +18,6 @@ namespace Acme.BookStore.Books
         public float Price { get; set; }
         public Guid AuthorId { get; set; }
         public string AuthorName { get; set; }
+        //public string ConcurrencyStamp { get; set; }
     }
 }

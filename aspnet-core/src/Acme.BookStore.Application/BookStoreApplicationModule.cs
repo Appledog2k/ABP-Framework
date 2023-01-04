@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp.Account;
 using Volo.Abp.AutoMapper;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Guids;
 using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
@@ -29,9 +31,14 @@ public class BookStoreApplicationModule : AbpModule
     }
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
+        Configure<AbpSequentialGuidGeneratorOptions>(options =>
+        {
+            options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsString;
+        });
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<BookStoreApplicationModule>();
+
         });
         // Sau khi hủy đăng kí tự động có thể dùng phương thức mở rộng AddAssembly để đăng kí tất cả dịch vụ theo quy ước mặc định
         context.Services.AddAssemblyOf<BookStoreApplicationModule>();

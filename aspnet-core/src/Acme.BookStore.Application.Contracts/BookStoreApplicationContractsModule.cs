@@ -9,6 +9,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.FluentValidation;
+using Volo.Abp.Guids;
 
 namespace Acme.BookStore;
 
@@ -33,6 +34,10 @@ namespace Acme.BookStore;
         //{
         //    options.ValueProviders.Add<SystemAdminPermissionValueProvider>();
         //});
+        Configure<AbpSequentialGuidGeneratorOptions>(options =>
+        {
+            options.DefaultSequentialGuidType = SequentialGuidType.SequentialAsString;
+        });
 
     }
 }

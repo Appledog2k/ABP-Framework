@@ -11,9 +11,9 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
     public override void Define(IPermissionDefinitionContext context)
     {
         // Khi thêm câu lệnh này sẽ loại bỏ hết tất cả quyền xóa roles
-        context
-    .GetPermissionOrNull(IdentityPermissions.Roles.Delete)
-    .IsEnabled = false;
+    //    context
+    //.GetPermissionOrNull(IdentityPermissions.Roles.Delete)
+    //.IsEnabled = false;
         //var myGroup = context.AddGroup(BookStorePermissions.GroupName);
         //Define your own permissions here. Example:
         //myGroup.AddPermission(BookStorePermissions.MyPermission1, L("Permission:MyPermission1"));
