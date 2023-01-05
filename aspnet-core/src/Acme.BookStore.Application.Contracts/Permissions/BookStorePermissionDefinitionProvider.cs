@@ -40,6 +40,20 @@ public class BookStorePermissionDefinitionProvider : PermissionDefinitionProvide
         authorsPermission.AddChild(
             BookStorePermissions.Authors.Delete, L("Permission:Authors.Delete"));
 
+        var productsPermission = bookStoreGroup.AddPermission(
+    BookStorePermissions.Products.Default, L("Permission:Products"));
+        productsPermission.AddChild(
+            BookStorePermissions.Products.Create, L("Permission:Products.Create"));
+
+        productsPermission.AddChild(
+            BookStorePermissions.Products.Edit, L("Permission:Products.Edit"));
+
+        productsPermission.AddChild(
+            BookStorePermissions.Products.Delete, L("Permission:Products.Delete"));
+
+
+
+
     }
 
     private static LocalizableString L(string name)

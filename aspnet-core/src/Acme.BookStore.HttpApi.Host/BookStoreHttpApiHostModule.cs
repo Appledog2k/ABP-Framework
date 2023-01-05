@@ -42,7 +42,8 @@ namespace Acme.BookStore;
     typeof(AbpAspNetCoreMvcUiLeptonXLiteThemeModule),
     typeof(AbpAccountWebOpenIddictModule),
     typeof(AbpAspNetCoreSerilogModule),
-    typeof(AbpSwashbuckleModule)
+    typeof(AbpSwashbuckleModule),
+    typeof(AbpAspNetCoreMvcModule)
 )]
     [DependsOn(typeof(AbpEmailingModule))]
     public class BookStoreHttpApiHostModule : AbpModule
@@ -204,6 +205,8 @@ namespace Acme.BookStore;
         });
     }
 
+    // phương thức thực thi mã trong khi ứng dụng đang được khởi chạy, thường được module khởi động sữ dụng
+    // để xây dựng đường dẫn cho các phần mềm trung gian trong ứng dụng ASP.NET CORE
     public override void OnApplicationInitialization(ApplicationInitializationContext context)
     {
         var app = context.GetApplicationBuilder();
