@@ -4,11 +4,11 @@ import { AuthGuard, PermissionGuard } from '@abp/ng.core';
 import { BookComponent } from './book.component';
 
 const routes: Routes = [
-  { path: '', component: BookComponent, canActivate: [AuthGuard, PermissionGuard] },
+  { path: 'books', component: BookComponent, canActivate: [AuthGuard, PermissionGuard] },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule],
+  exports: [RouterModule]
 })
-export class BookRoutingModule {}
+export class BookRoutingModule { }

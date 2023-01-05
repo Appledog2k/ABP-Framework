@@ -2,12 +2,13 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
+
   {
     path: '',
     pathMatch: 'full',
     loadChildren: () => import('./home/home.module').then(m => m.HomeModule),
   },
+
   {
     path: 'account',
     loadChildren: () => import('@abp/ng.account').then(m => m.AccountModule.forLazy()),
@@ -26,13 +27,17 @@ const routes: Routes = [
     loadChildren: () =>
       import('@abp/ng.setting-management').then(m => m.SettingManagementModule.forLazy()),
   },
-  { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
-  { path: 'books', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
-  { path: 'authors', loadChildren: () => import('./author/author.module').then(m => m.AuthorModule) },
+  { path: 'bookstore', loadChildren: () => import('./book/book.module').then(m => m.BookModule) },
+  { path: 'bookstore', loadChildren: () => import('./author/author.module').then(m => m.AuthorModule) },
+
+  { path: 'products', loadChildren: () => import('./product/product.module').then(m => m.ProductModule) },
+
+  { path: '**', loadChildren: () => import('./author/author.module').then(m => m.AuthorModule) },
+
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

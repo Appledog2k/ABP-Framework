@@ -10,32 +10,42 @@ function configureRoutes(routes: RoutesService) {
     routes.add([
       {
         path: '/',
+
         name: '::Menu:Home',
         iconClass: 'fas fa-home',
         order: 1,
         layout: eLayoutType.application,
       },
       {
-        path: '/book-store',
         name: '::Menu:BookStore',
         iconClass: 'fas fa-book',
         order: 2,
         layout: eLayoutType.application,
       },
       {
-        path: '/books',
+        path: '/products',
+        name: '::Menu:Product',
+        iconClass: 'fas fa-bicycle',
+        order: 3,
+        layout: eLayoutType.application,
+        requiredPolicy: 'BookStore.Products',
+      },
+
+      {
+        path: '/bookstore/books',
         name: '::Menu:Books',
         parentName: '::Menu:BookStore',
         layout: eLayoutType.application,
         requiredPolicy: 'BookStore.Books',
       },
       {
-        path: '/authors',
+        path: '/bookstore/authors',
         name: '::Menu:Authors',
         parentName: '::Menu:BookStore',
         layout: eLayoutType.application,
         requiredPolicy: 'BookStore.Authors',
-      }
+      },
+
 
     ]);
   };

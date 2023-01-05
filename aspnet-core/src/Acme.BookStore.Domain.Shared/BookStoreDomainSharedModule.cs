@@ -23,7 +23,7 @@ namespace Acme.BookStore;
     typeof(AbpOpenIddictDomainSharedModule),
     typeof(AbpPermissionManagementDomainSharedModule),
     typeof(AbpSettingManagementDomainSharedModule),
-    typeof(AbpTenantManagementDomainSharedModule)    
+    typeof(AbpTenantManagementDomainSharedModule)
     )]
 public class BookStoreDomainSharedModule : AbpModule
 {
@@ -43,7 +43,7 @@ public class BookStoreDomainSharedModule : AbpModule
         Configure<AbpLocalizationOptions>(options =>
         {
             options.Resources
-                .Add<BookStoreResource>("en")
+                .Add<BookStoreResource>("vi")
                 .AddBaseTypes(typeof(AbpValidationResource))
                 .AddVirtualJson("/Localization/BookStore");
 
